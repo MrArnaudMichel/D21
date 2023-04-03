@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.Common;
 using System.Data.OleDb;
 using System.Drawing;
 using System.Linq;
@@ -77,6 +78,7 @@ namespace mode_déconnecté
             cbbthem.DataSource = ds.Tables["tblThematique"];
             cbbthem.DisplayMember = "libThem";
             cbbthem.ValueMember = "codeThem";
+            cbbthem.SelectedIndex = -1;
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -149,6 +151,43 @@ namespace mode_déconnecté
         private void label1_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void btnrecherch_Click(object sender, EventArgs e)
+        {
+            datagridrecherche.DataSource = ds.Tables["tblVoyages"];
+            datagridrecherche.Refresh();
+        }
+
+        private void dataGridView2_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+        }
+
+        private void dataGridView2_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+           
+            if (e.Value != null && cbbthem.SelectedIndex != -1 && txtprix.Text != "" && datagridrecherche.Rows[e.RowIndex].Cells["TypeThematique"].Value.ToString() == cbbthem.SelectedValue.ToString() && int.Parse(datagridrecherche.Rows[e.RowIndex].Cells["Prix"].Value.ToString()) < int.Parse(txtprix.Text.ToString()))
+            {
+                e.CellStyle.BackColor = Color.Green;
+              
+            }
+        }
+
+        List<DataGridViewRow> lines = new List<DataGridViewRow>();
+
+        private void button3_Click_1(object sender, EventArgs e)
+        {
+            lines = new List<DataGridViewRow>();
+            foreach (DataGridViewRow dataRow in datagridrecherche.SelectedRows)
+            {
+                lines.Add(dataRow);
+                datagridrecherche.Rows.Remove(dataRow);
+            }
+        }
+
+        private void button3_Click_2(object sender, EventArgs e)
+        {
+            ds.RejectChanges();
         }
     }
 }
