@@ -133,6 +133,11 @@ namespace mode_déconnecté
                 request += "NumClient = '" + cbbClient.SelectedValue.ToString() + "'";
             }
             DataRow[] drs = ds.Tables["tblReservations"].Select(request);
+            if (drs.Length == 0)
+            {
+                MessageBox.Show("Aucune réservation ne correspond à votre recherche");
+                return;
+            }
             dt = drs.CopyToDataTable();
             dataGridView1.DataSource = dt;
 
@@ -168,7 +173,7 @@ namespace mode_déconnecté
            
             if (e.Value != null && cbbthem.SelectedIndex != -1 && txtprix.Text != "" && datagridrecherche.Rows[e.RowIndex].Cells["TypeThematique"].Value.ToString() == cbbthem.SelectedValue.ToString() && int.Parse(datagridrecherche.Rows[e.RowIndex].Cells["Prix"].Value.ToString()) < int.Parse(txtprix.Text.ToString()))
             {
-                e.CellStyle.BackColor = Color.Green;
+                e.CellStyle.BackColor = Color.LightGreen;
               
             }
         }
