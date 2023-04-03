@@ -73,6 +73,10 @@ namespace mode_déconnecté
             cbbClient.DisplayMember = "NomClient";
             cbbClient.ValueMember = "NumClient";
             cbbClient.SelectedIndex = -1;
+
+            cbbthem.DataSource = ds.Tables["tblThematique"];
+            cbbthem.DisplayMember = "libThem";
+            cbbthem.ValueMember = "codeThem";
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -126,7 +130,6 @@ namespace mode_déconnecté
                 }
                 request += "NumClient = '" + cbbClient.SelectedValue.ToString() + "'";
             }
-            MessageBox.Show(request);
             DataRow[] drs = ds.Tables["tblReservations"].Select(request);
             dt = drs.CopyToDataTable();
             dataGridView1.DataSource = dt;
@@ -141,7 +144,11 @@ namespace mode_déconnecté
         private void btnadd_Click(object sender, EventArgs e)
         {
             string request = "INSERT INTO tblReservations(NumClient, CodeVoyage, DateReservation) values('" + cbbDest.SelectedValue.ToString() + "', #" + dateTimePicker1.Value.Month.ToString() + "/" + dateTimePicker1.Value.Day.ToString() + "/" + dateTimePicker1.Value.Year.ToString() + "#, '" + cbbClient.SelectedValue.ToString() + "')";
-            DataRow datarow = new 
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
