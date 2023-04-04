@@ -58,7 +58,23 @@ namespace mode_déconnecté
                 da.Fill(ds, nomTable);
             }
             conn.Close();
+            ds.Tables["tblVoyages"].PrimaryKey = new DataColumn[] { ds.Tables["tblVoyages"].Columns["CodeVoyage"] };
+            DataRelation dre = new DataRelation("VoyageReservation", ds.Tables["tblVoyages"].Columns["CodeVoyage"], ds.Tables["tblReservations"].Columns["CodeVoyage"]);
+            ds.Relations.Add(dre);
 
+            DataRow dataRow = ds.Tables["tblReservations"].NewRow();
+            try
+            {
+                dataRow["CodeVoyage"] = "VY0001";
+                dataRow["NumClient"] = 5;
+                dataRow["DateReservation"] = DateTime.Now;
+                ds.Tables["tblReservations"].Rows.Add(dataRow);
+            }
+            catch
+            {
+                //MessageBox.Show("La destnation n'existe pas");
+            }      
+            
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -193,6 +209,17 @@ namespace mode_déconnecté
         private void button3_Click_2(object sender, EventArgs e)
         {
             ds.RejectChanges();
+        }
+
+        private void buttonPS_Click(object sender, EventArgs e)
+        {
+            OleDbCommand oleDbCommand = new OleDbCommand();
+            oleDbCommand.CommandType = CommandType.StoredProcedure;
+            oleDbCommand.CommandText = "rqtClientsParisiens";
+            oleDbCommand.ExecuteNonQuery();
+
+            dgvParis.DataSource = ds.Tables["tblClientsParisiens"].Copy();
+
         }
     }
 }
