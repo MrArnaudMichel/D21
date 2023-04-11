@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml;
 
 namespace mode_déconnecté
 {
@@ -213,13 +214,92 @@ namespace mode_déconnecté
 
         private void buttonPS_Click(object sender, EventArgs e)
         {
+            conn.Open();
+            DataTable dt = conn.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, new object[] { null, null, null, "Table" });
+            foreach (DataRow row in dt.Rows)
+            {
+                string nomTable = row[2].ToString();
+                //MessageBox.Show(nomTable);
+                if (nomTable == "tblClientsParisiens")
+                {
+                    string request = "DROP TABLE tblClientsParisiens";
+                    OleDbCommand cmd = new OleDbCommand();
+                    cmd.Connection = conn;
+                    cmd.CommandType = CommandType.Text;
+                    cmd.CommandText = request;
+                    cmd.ExecuteNonQuery();
+                }
+            }
             OleDbCommand oleDbCommand = new OleDbCommand();
             oleDbCommand.CommandType = CommandType.StoredProcedure;
             oleDbCommand.CommandText = "rqtClientsParisiens";
+            oleDbCommand.Connection = conn;
             oleDbCommand.ExecuteNonQuery();
 
-            dgvParis.DataSource = ds.Tables["tblClientsParisiens"].Copy();
+            DataTable datatable = new DataTable();
+            OleDbDataAdapter da = new OleDbDataAdapter("SELECT * FROM " + "tblClientsParisiens", conn);
+            da.Fill(datatable);
+            dgvParis.DataSource = datatable;
+            conn.Close();
 
+        }
+
+        private void btnpsp_Click(object sender, EventArgs e)
+        {
+            conn.Open();
+            DataTable dt = conn.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, new object[] { null, null, null, "Table" });
+            foreach (DataRow row in dt.Rows)
+            {
+                string nomTable = row[2].ToString();
+                if (nomTable == "tblClientsVilleParametree")
+                {
+                    string request = "DROP TABLE tblClientsVilleParametree";
+                    OleDbCommand cmd = new OleDbCommand();
+                    cmd.Connection = conn;
+                    cmd.CommandType = CommandType.Text;
+                    cmd.CommandText = request;
+                    cmd.ExecuteNonQuery();
+                }
+            }
+            OleDbCommand oleDbCommand = new OleDbCommand();
+            oleDbCommand.CommandType = CommandType.StoredProcedure;
+            oleDbCommand.CommandText = "rqtClientsVilleAuChoix";
+            oleDbCommand.Parameters.AddWithValue("@ville", txtpara.Text);
+            oleDbCommand.Connection = conn;
+            oleDbCommand.ExecuteNonQuery();
+
+            DataTable datatable = new DataTable();
+            OleDbDataAdapter da = new OleDbDataAdapter("SELECT * FROM " + "tblClientsVilleParametree", conn);
+            da.Fill(datatable);
+            dgvParis.DataSource = datatable;
+            conn.Close();
+        }
+
+        private void rtxtModif_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnModif_Click(object sender, EventArgs e)
+        {
+            DataTable changes = ds.Tables["tblVoyages"].GetChanges();
+            rtxtModif.Clear();
+            rtxtModif.Text += "Toute les Modification \n\n";
+
+            foreach (DataRow row in changes.Rows)
+            {
+                if (row.RowState == DataRowState.Deleted)
+                {
+                    rtxtModif.Text += "Ligne supprimer " + row["CodeVoyage", DataRowVersion.Original].ToString() + "\n";
+                }
+                else if (row.RowState == DataRowState.Modified)
+                {
+                    rtxtModif.Text += "Ligne modifier " + row["CodeVoyage"] + "\n";
+                }
+            }
+            {
+
+            }
         }
     }
 }

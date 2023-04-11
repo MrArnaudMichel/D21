@@ -61,6 +61,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Voyages2010DataSet.xsd</DependentUpon>
     </Compile>
+    <Compile Include="Voyages2010DataSet1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Voyages2010DataSet1.xsd</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -92,6 +97,17 @@
     </None>
     <None Include="Voyages2010DataSet.xss">
       <DependentUpon>Voyages2010DataSet.xsd</DependentUpon>
+    </None>
+    <None Include="Voyages2010DataSet1.xsc">
+      <DependentUpon>Voyages2010DataSet1.xsd</DependentUpon>
+    </None>
+    <None Include="Voyages2010DataSet1.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>Voyages2010DataSet1.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Voyages2010DataSet1.xss">
+      <DependentUpon>Voyages2010DataSet1.xsd</DependentUpon>
     </None>
   </ItemGroup>
   <ItemGroup>
