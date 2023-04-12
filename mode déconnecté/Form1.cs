@@ -81,6 +81,26 @@ namespace mode_déconnecté
             cbbthem.DisplayMember = "libThem";
             cbbthem.ValueMember = "codeThem";
             cbbthem.SelectedIndex = -1;
+            /*
+            cbbdestmaitre.DataSource = ds.Tables["tblVoyages"];
+            cbbdestmaitre.DisplayMember = "Destination";
+            cbbdestmaitre.ValueMember = "CodeVoyage";
+            cbbdestmaitre.SelectedIndex = -1;*/
+            
+            DataRelation dr = new DataRelation("VoyageDestination", ds.Tables["tblVoyages"].Columns["CodeVoyage"], ds.Tables["tblReservations"].Columns["CodeVoyage"]);
+            ds.Relations.Add(dr);
+
+            BindingSource bs = new BindingSource();
+            bs.DataSource = ds;
+            bs.DataMember = "tblVoyages";
+
+            BindingSource bs2 = new BindingSource();
+            bs2.DataSource = bs;
+            bs2.DataMember = "VoyageDestination";
+
+            cbbdestmaitre.DataSource = bs;
+            cbbdestmaitre.DisplayMember = "Destination";
+            dgwMaitre.DataSource = bs2;
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -290,8 +310,8 @@ namespace mode_déconnecté
         private void btnconstr_Click(object sender, EventArgs e)
         {
             ds.Tables["tblVoyages"].PrimaryKey = new DataColumn[] { ds.Tables["tblVoyages"].Columns["CodeVoyage"] };
-            DataRelation dre = new DataRelation("VoyageReservation", ds.Tables["tblVoyages"].Columns["CodeVoyage"], ds.Tables["tblReservations"].Columns["CodeVoyage"]);
-            ds.Relations.Add(dre);
+            /*DataRelation dre = new DataRelation("VoyageReservation", ds.Tables["tblVoyages"].Columns["CodeVoyage"], ds.Tables["tblReservations"].Columns["CodeVoyage"]);
+            ds.Relations.Add(dre);*/
         }
 
         private void btntest_Click(object sender, EventArgs e)
@@ -308,6 +328,39 @@ namespace mode_déconnecté
             {
                 MessageBox.Show("La destnation n'existe pas");
             }
+        }
+
+        private void dbbdestmaitre_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+
+        }
+
+        private void btnlogin_Click(object sender, EventArgs e)
+        {
+            DataTable tblLogin = new DataTable("tblLogin");
+            tblLogin.Columns.Add("NumClient", typeof(int));
+            tblLogin.Columns.Add("Login", typeof(string));
+            tblLogin.Columns.Add("Mdp", typeof(string));
+            tblLogin.Columns.Add("Date", typeof(DateTime));
+            tblLogin.PrimaryKey = new DataColumn[] { tblLogin.Columns["NumClient"] };
+            if (ds.Tables.Contains("tblLogin"))
+            {
+                ds.Tables.Remove("tblLogin");
+            }
+            ds.Tables.Add(tblLogin);
+
+            foreach (DataRow row in ds.Tables["tblClients"].Rows)
+            {
+                DataRow dataRow = tblLogin.NewRow();
+                dataRow["NumClient"] = row["NumClient"];
+                dataRow["Login"] = row["Prenom"].ToString()[0] + row["NomClient"].ToString().Substring(0, 4);
+                dataRow["Mdp"] = row["Prenom"].ToString() + row["NumClient"].ToString();
+                dataRow["Date"] = DateTime.Now;
+                tblLogin.Rows.Add(dataRow);
+            }
+
+            dtglogin.DataSource = tblLogin;
         }
     }
 }
