@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
+using Voyage;
 
 namespace mode_déconnecté
 {
@@ -101,6 +102,11 @@ namespace mode_déconnecté
             cbbdestmaitre.DataSource = bs;
             cbbdestmaitre.DisplayMember = "Destination";
             dgwMaitre.DataSource = bs2;
+
+            cbbdestiationuc.DataSource = ds.Tables["tblVoyages"];
+            cbbdestiationuc.DisplayMember = "Destination";
+            cbbdestiationuc.ValueMember = "CodeVoyage";
+            cbbdestiationuc.SelectedIndex = -1;
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -361,6 +367,20 @@ namespace mode_déconnecté
             }
 
             dtglogin.DataSource = tblLogin;
+        }
+
+        private void btnrech_Click(object sender, EventArgs e)
+        {
+            CardVoyage c = new CardVoyage();
+            c.Left = 10;
+            c.Top = 50;
+            this.tabPage7.Controls.Add(c);
+            c.Prix = "Prix: 10000";
+        }
+
+        private void tabPage7_Click(object sender, EventArgs e)
+        {
+            
         }
     }
 }
