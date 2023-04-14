@@ -378,7 +378,6 @@ namespace mode_déconnecté
                 cardVoyage.Top = 50;
                 this.tabPage7.Controls.Add(cardVoyage);
                 cardVoyage.Destination = cbbdestiationuc.Text;
-
             }
         }
 
