@@ -371,11 +371,15 @@ namespace mode_déconnecté
 
         private void btnrech_Click(object sender, EventArgs e)
         {
-            CardVoyage c = new CardVoyage();
-            c.Left = 10;
-            c.Top = 50;
-            this.tabPage7.Controls.Add(c);
-            c.Prix = "Prix: 10000";
+            if (cbbdestiationuc.SelectedIndex != -1)
+            {
+                CardVoyage cardVoyage = new CardVoyage();
+                cardVoyage.Left = 10;
+                cardVoyage.Top = 50;
+                this.tabPage7.Controls.Add(cardVoyage);
+                cardVoyage.Destination = cbbdestiationuc.Text;
+
+            }
         }
 
         private void tabPage7_Click(object sender, EventArgs e)
